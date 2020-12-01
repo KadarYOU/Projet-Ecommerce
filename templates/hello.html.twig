@@ -1,0 +1,9 @@
+{% extends 'base.html.twig'%}
+
+{% block body %}
+<h1> Hello {{ prenom }} ! </h1>
+{% include "_formateur.html.twig" %}
+<p> <strong>{{formateur2.prenom}}</strong>  {{formateur2.nom}}</p>
+  
+{% endblock %}
+

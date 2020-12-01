@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 
+use App\Taxes\Detector;
 use App\Taxes\Calculator;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 class TestController
 {
@@ -21,13 +23,19 @@ class TestController
   /**
    * @Route("/test/{prenom?World}", name="test")
    */
-  public function test(Request $request, $prenom)
+  public function test(Request $request, $prenom, Environment $twig)
   {
-    $tva = $this->calculator->calcul(100);
+    $html = $twig->render('hello.html.twig', [
+      'prenom' => $prenom,
+      'formateur1' => ['prenom' => 'Lior', 'nom' => 'Chamla'],
+      'formateur2' => ['prenom' => 'Kadar', 'nom' => 'Youssouf']
 
-    $slugify = new Slugify();
-    $slugify->Slugify("Hello World");
-    dump($slugify);
-    return new Response("Hello $prenom ");
+
+
+    ]);
+
+
+
+    return new Response($html);
   }
 }
