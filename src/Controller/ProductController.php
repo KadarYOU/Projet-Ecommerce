@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Form\ProductType;
+
 use Doctrine\ORM\EntityManager;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
@@ -21,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -74,7 +76,7 @@ class ProductController extends AbstractController
         // $form = $builder->getForm();
         $form->handleRequest($request);
         // $data = $form->getData();
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // $product = $form->getData();
             $product->setSlug(strtolower($slugger->slug($product->getName())));
             // $product = new Product;
@@ -99,13 +101,20 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/{id}/edit", name="product_edit")
      */
-    public function edit($id,  ProductRepository $productRepository, Request $request, EntityManagerInterface $em)
+    public function edit($id,  ProductRepository $productRepository, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
     {
+        // $product = new Product;
+        // $resultat = $validator->validate($product);
+        // if ($resultat->count() > 0) {
+        //     dd("il y a des erreurs ", $resultat);
+        // }
+        // dd("Tout va bien");
+
         $product = $productRepository->find($id);
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // dd($form->getData());
 
 
